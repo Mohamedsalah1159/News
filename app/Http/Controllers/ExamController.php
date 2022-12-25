@@ -58,7 +58,7 @@ class ExamController extends Controller
             //find exam
             $exam = Exam::find($id);
             if(! $exam){
-                return $this->returnError(422, 'sorry this is not exists');
+                return $this->returnError(200, 'sorry this is not exists');
             }
             //validate request
             $validator = Validator::make($request->all(), [
@@ -86,7 +86,7 @@ class ExamController extends Controller
                 if (is_array($users) || is_object($users)){
                     foreach ($users as $user){
                         if(($user == $one['user_id'])){
-                            return $this->returnError(422, 'sorry this is exists');
+                            return $this->returnError(200, 'sorry this is exists');
                         }
                         ExamUser::create([
                             'user_id' => $user,
@@ -119,7 +119,7 @@ class ExamController extends Controller
             //find exam
             $exam = Exam::with(['questions.answer'])->find($id);
             if(! $exam){
-                return $this->returnError(422, 'sorry this is not exists');
+                return $this->returnError(200, 'sorry this is not exists');
             }
             return $this->returnData(200, 'there is exam with his all questions and answer', $exam);
         }
@@ -135,7 +135,7 @@ class ExamController extends Controller
                 $q->select('user_id', 'exam_id')->get();
             }])->find($id);
             if(! $exam){
-                return $this->returnError(422, 'sorry this is not exists');
+                return $this->returnError(200, 'sorry this is not exists');
             }
             return $this->returnData(200, 'there is exam with his all users in this', $exam);
         }
@@ -148,7 +148,7 @@ class ExamController extends Controller
         try{
             $user = User::with('userExams.examUsers')->find($id);
             if(! $user){
-                return $this->returnError(422, 'sorry this is not exists');
+                return $this->returnError(200, 'sorry this is not exists');
             }
             return $this->returnData(200, 'there is user with his Exams', $user);
 
@@ -167,7 +167,7 @@ class ExamController extends Controller
             return $this->returnSuccess(200, 'This exam successfuly Deleted');
 
             }
-            return $this->returnError(422, 'sorry this id not exists');
+            return $this->returnError(200, 'sorry this id not exists');
 
         }catch(\Exception $ex){
             return $this->returnError(422, 'sorry this is an error');

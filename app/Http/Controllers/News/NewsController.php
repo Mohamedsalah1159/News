@@ -163,7 +163,7 @@ class NewsController extends Controller
                 return $this->returnSuccess(200, 'this News is Updated succssfuly' );
     
             }
-            return $this->returnError(422, 'sorry this is not exists');
+            return $this->returnError(200, 'sorry this is not exists');
 
         }catch(\Exception $ex){
             return $this->returnError(422, 'sorry this is an error');
@@ -173,7 +173,7 @@ class NewsController extends Controller
         try{
             $status = News::find($id);
             if(!$status){
-                return $this->returnError(422, 'sorry this is not exists');
+                return $this->returnError(200, 'sorry this is not exists');
             }
             $newstatus = $status->status == 0? 1 : 0;
             $status->update(['status' => $newstatus]);
@@ -187,7 +187,7 @@ class NewsController extends Controller
         try{
             $const = News::find($id);
             if(!$const){
-                return $this->returnError(422, 'sorry this is not exists');
+                return $this->returnError(200, 'sorry this is not exists');
             }
             $newstatus = $const->const == 0? 1 : 0;
             $const->update(['const' => $newstatus]);
@@ -205,7 +205,7 @@ class NewsController extends Controller
             if($news->count() >= 1){
                 return $this->returnData(200, 'there is all news', $news);
             }
-            return $this->returnError(422, 'sorry this is not exists');
+            return $this->returnError(200, 'sorry this is not exists');
 
         }
         catch(\Exception $ex){
@@ -219,7 +219,7 @@ class NewsController extends Controller
             if($news->count() >= 1){
                 return $this->returnData(200, 'there is all news', $news);
             }
-            return $this->returnError(422, 'sorry this is not exists');
+            return $this->returnError(200, 'sorry this is not exists');
 
         }
         catch(\Exception $ex){
@@ -242,7 +242,7 @@ class NewsController extends Controller
             return $this->returnSuccess(200, 'This news successfuly Deleted');
 
             }
-            return $this->returnError(422, 'sorry this id not exists');
+            return $this->returnError(200, 'sorry this id not exists');
 
         }catch(\Exception $ex){
             return $this->returnError(422, 'sorry this is an error');

@@ -37,7 +37,7 @@ class FolderController extends Controller
             //find folder
             $folder = Folder::find($id);
             if(! $folder){
-                return $this->returnError(422, 'sorry this is not exists');
+                return $this->returnError(200, 'sorry this is not exists');
             }
             //validate request
             $validator = Validator::make($request->all(), [
@@ -72,7 +72,7 @@ class FolderController extends Controller
             //find folder
             $folder = Folder::with('gallary')->find($id);
             if(! $folder){
-                return $this->returnError(422, 'sorry this is not exists');
+                return $this->returnError(200, 'sorry this is not exists');
             }
             return $this->returnData(200, 'there is folder with his all images', $folder);
         }
@@ -92,7 +92,7 @@ class FolderController extends Controller
             return $this->returnSuccess(200, 'This folder successfuly Deleted');
 
             }
-            return $this->returnError(422, 'sorry this id not exists');
+            return $this->returnError(200, 'sorry this id not exists');
 
         }catch(\Exception $ex){
             return $this->returnError(422, 'sorry this is an error');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Traits\AllTrait;
 use App\Models\Question;
+use App\Models\Answer;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -15,21 +16,29 @@ class QuestionController extends Controller
         try{
             //validation
             $validator = Validator::make($request->all(), [
-                'name' => 'required|string|max:191',
-                'exam_id' => 'required|integer',
-                'type' => 'required|in:text,choose,rightAndLong',
+
             ]);
 
             if ($validator->fails()) {
                 return $this->returnError(422, 'sorry this is an error', 'Error', $validator->errors());
             }
-            Question::create([
-                'name' => $request->name,
-                'exam_id' => $request->exam_id,
-                'type' => $request->type,              
-            ]);
-            $lastQuestion = Question::latest('id')->first();
-            return $this->returnSuccess(200, 'this question is added succssfuly', $lastQuestion );
+            foreach($request->toArray() as $oneRequest){
+                Question::create([
+                    'name' => $oneRequest['question'],
+                    'exam_id' => $oneRequest['examId'],
+                    'type' => $oneRequest['questionType'] ,              
+                ]);
+                $lastQuestion = Question::latest('id')->first();
+                foreach($oneRequest['answer'] as $answer){
+                    Answer::create([
+                        'name' => $answer['name'],
+                        'question_id' => $lastQuestion->id,
+                        'status' => $answer['status']
+                    ]);
+                }
+            }
+
+            return $this->returnSuccess(200, 'this questions are added succssfuly');
 
         }catch(\Exception $ex){
             return $this->returnError(422, 'sorry this is an error');
@@ -41,23 +50,30 @@ class QuestionController extends Controller
             //find question
             $question = Question::find($id);
             if(! $question){
-                return $this->returnError(422, 'sorry this is not exists');
+                return $this->returnError(200, 'sorry this is not exists');
             }
             //validate request
             $validator = Validator::make($request->all(), [
-                'name' => 'required|string|max:191',
-                'exam_id' => 'required|integer',
-                'type' => 'required|in:text,choose,rightAndLong',
+
             ]);
             if ($validator->fails()) {
                 return $this->returnError(422, 'sorry this is an error in validation', 'Error', $validator->errors());
             }
-            //store request in db
-            $question->update([
-                'name' => $request->name,
-                'exam_id' => $request->exam_id,
-                'type' => $request->type,  
-            ]);
+            //update request in db
+            foreach($request->toArray() as $oneRequest){
+                $question->update([
+                    'name' => $oneRequest['question'],
+                    'exam_id' => $oneRequest['examId'],
+                    'type' => $oneRequest['questionType'] ,              
+                ]);
+                foreach($oneRequest['answer'] as $answer){
+                    Answer::create([
+                        'name' => $answer['name'],
+                        'question_id' => $question->id,
+                        'status' => $answer['status']
+                    ]);
+                }
+            }
 
             return $this->returnSuccess(200, 'this question is updated succssfuly' );
 
@@ -80,7 +96,7 @@ class QuestionController extends Controller
             //find folder
             $question = Question::with('answer')->find($id);
             if(! $question){
-                return $this->returnError(422, 'sorry this is not exists');
+                return $this->returnError(200, 'sorry this is not exists');
             }
             return $this->returnData(200, 'this is question with his answer', $question);
         }
@@ -100,7 +116,7 @@ class QuestionController extends Controller
             return $this->returnSuccess(200, 'This question successfuly Deleted');
 
             }
-            return $this->returnError(422, 'sorry this id not exists');
+            return $this->returnError(200, 'sorry this id not exists');
 
         }catch(\Exception $ex){
             return $this->returnError(422, 'sorry this is an error');

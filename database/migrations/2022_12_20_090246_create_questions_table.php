@@ -16,7 +16,7 @@ class CreateQuestionsTable extends Migration
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->enum('type', ['text', 'choose', 'rightAndLong']);
+            $table->enum('type', ['text', 'choose', 'rightAndWrong']);
             $table->unsignedBigInteger('exam_id');
             $table->foreign('exam_id')->references('id')->on('exams')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
