@@ -28,7 +28,8 @@ class QuestionController extends Controller
                 'exam_id' => $request->exam_id,
                 'type' => $request->type,              
             ]);
-            return $this->returnSuccess(200, 'this question is added succssfuly' );
+            $lastQuestion = Question::latest('id')->first();
+            return $this->returnSuccess(200, 'this question is added succssfuly', $lastQuestion );
 
         }catch(\Exception $ex){
             return $this->returnError(422, 'sorry this is an error');
@@ -66,7 +67,7 @@ class QuestionController extends Controller
     }
     public function getAllQuestions(){
         try{
-            $questions = Question::get();
+            $questions = Question::paginate(PAGINATION_COUNT);
             return $this->returnData(200, 'there is all questions', $questions);
         }
         catch(\Exception $ex){

@@ -23,7 +23,8 @@ class GovernorateController extends Controller
             Governorate::create([
                 'name' => $request->name
             ]);
-            return $this->returnSuccess(200, 'this governorate is added succssfuly' );
+            $lastGovernorate = Governorate::latest('id')->first();
+            return $this->returnSuccess(200, 'this governorate is added succssfuly', $lastGovernorate );
 
         }catch(\Exception $ex){
             return $this->returnError(422, 'sorry this is an error');
@@ -31,7 +32,7 @@ class GovernorateController extends Controller
     }
     public function getAll(){
         try{
-            $gover = Governorate::select('*')->get();
+            $gover = Governorate::select('*')->paginate(PAGINATION_COUNT);
             return $this->returnData(200, 'there is all governorates', $gover);
         }
         catch(\Exception $ex){

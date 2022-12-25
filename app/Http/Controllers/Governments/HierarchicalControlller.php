@@ -26,8 +26,8 @@ class HierarchicalControlller extends Controller
                 'position' => $request->position,
                 'parent' => $request->parent
             ]);
-
-            return $this->returnSuccess(200, 'this Hierarchical is added succssfuly' );
+            $lastHierarchical = Hierarchical::latest('id')->first();
+            return $this->returnSuccess(200, 'this Hierarchical is added succssfuly', $lastHierarchical );
 
         }catch(\Exception $ex){
             return $this->returnError(422, 'sorry this is an error');
@@ -62,12 +62,8 @@ class HierarchicalControlller extends Controller
     }
     public function getAll(){
         try{
-            $hierarchical = Hierarchical::select("*")->get();
-            
-            if($hierarchical->count() >= 1){
-                return $this->returnData(200, 'there is all hierarchical', $hierarchical);
-            }
-            return $this->returnError(422, 'sorry this is no data');
+            $hierarchical = Hierarchical::select("*")->paginate(PAGINATION_COUNT);
+            return $this->returnData(200, 'there is all hierarchical', $hierarchical);
         }catch(\Exception $ex){
             return $this->returnError(422, 'sorry this is an error');
         }

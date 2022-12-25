@@ -24,7 +24,8 @@ class FolderController extends Controller
             Folder::create([
                 'name' => $request->name,                
             ]);
-            return $this->returnSuccess(200, 'this folder is added succssfuly' );
+            $lastFolder = Folder::latest('id')->first();
+            return $this->returnSuccess(200, 'this folder is added succssfuly', $lastFolder );
 
         }catch(\Exception $ex){
             return $this->returnError(422, 'sorry this is an error');
@@ -58,7 +59,7 @@ class FolderController extends Controller
     }
     public function getAllFolders(){
         try{
-            $folder = Folder::get();
+            $folder = Folder::paginate(PAGINATION_COUNT);
             return $this->returnData(200, 'there is all folders', $folder);
         }
         catch(\Exception $ex){

@@ -45,7 +45,8 @@ class EmployeeController extends Controller
                 'folder_id' => $request->folder_id,
                 'employee_id' => $lastNewOfEmployee->id,
             ]);
-            return $this->returnSuccess(200, 'this Employee is added succssfuly' );
+            $lastEmployee = Employee::latest('id')->first();
+            return $this->returnSuccess(200, 'this Employee is added succssfuly', $lastEmployee );
 
         }catch(\Exception $ex){
             return $ex;
@@ -104,12 +105,8 @@ class EmployeeController extends Controller
     }
     public function getAll(){
         try{
-            $employee = Employee::with('gallary')->select("*")->get();
-            
-            if($employee->count() >= 1){
-                return $this->returnData(200, 'there is all employees', $employee);
-            }
-            return $this->returnError(422, 'sorry this is no data');
+            $employee = Employee::with('gallary')->select("*")->paginate(PAGINATION_COUNT);
+            return $this->returnData(200, 'there is all employees', $employee);
         }catch(\Exception $ex){
             return $this->returnError(422, 'sorry this is an error');
         }

@@ -47,7 +47,8 @@ class VideoContoller extends Controller
                    
                     'name' => $request->name
                 ]);
-                return $this->returnSuccess(200, 'link video is added succssfuly' );
+                $lastVideo = Video::latest('id')->first();
+                return $this->returnSuccess(200, 'link video is added succssfuly', $lastVideo );
                 
             }
             return $this->returnError('422', 'there is an error in uploading');

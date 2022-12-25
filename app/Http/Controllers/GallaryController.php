@@ -42,8 +42,6 @@ class GallaryController extends Controller
                 }
 
                 return $this->returnSuccess(200, 'photo is added succssfuly', $lastImage);
-
-
             }
             return $this->returnError('422', 'there is an error in uploading');
 

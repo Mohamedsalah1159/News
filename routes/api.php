@@ -149,6 +149,7 @@ Route::group(['namespace'=>'App\Http\Controllers'], function(){
             ############### start government into Governments ###########
              Route::post('create-government', 'GovernmentController@store');
              Route::post('changeReqStatus-government/{id}', 'GovernmentController@changeReqStatus');
+             Route::post('changeGovernmentStatus/{id}', 'GovernmentController@changeGovernmentStatus');
              Route::post('update-government/{id}', 'GovernmentController@update');
              Route::post('delete-government/{id}', 'GovernmentController@destroy');
             ############### end government into Governments ###########
@@ -167,6 +168,8 @@ Route::group(['namespace'=>'App\Http\Controllers'], function(){
             ############### start government into Governments ###########
             Route::get('getOne-government/{id}', 'GovernmentController@getOne');
             Route::get('getAll-governments', 'GovernmentController@getAll');
+            Route::get('getAllBasics', 'GovernmentController@getAllBasics');
+            Route::get('getAllSubGovernment', 'GovernmentController@getAllSubGovernment');
             ############### end government into Governments ###########
 
             ############### start hierarchical into Governments ###########

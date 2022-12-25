@@ -27,8 +27,8 @@ class InitiativeController extends Controller
                 'name' => $request->name,
                 'desc' => $request->desc
             ]);
-
-            return $this->returnSuccess(200, 'this Initiative is added succssfuly' );
+            $lastInitiative = Initiative::latest('id')->first();
+            return $this->returnSuccess(200, 'this Initiative is added succssfuly', $lastInitiative );
 
         }catch(\Exception $ex){
             return $this->returnError(422, 'sorry this is an error');
@@ -79,10 +79,8 @@ class InitiativeController extends Controller
         try{
             $initiative = Initiative::select("*")->with(['news'])->paginate(PAGINATION_COUNT);
             
-            if($initiative->count() >= 1){
-                return $this->returnData(200, 'there is all initiative', $initiative);
-            }
-            return $this->returnError(422, 'sorry this is no data');
+            return $this->returnData(200, 'there is all initiative', $initiative);
+            
         }catch(\Exception $ex){
             return $this->returnError(422, 'sorry this is an error');
         }

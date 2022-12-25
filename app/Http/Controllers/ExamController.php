@@ -46,7 +46,7 @@ class ExamController extends Controller
                 ]);
             }
 
-            return $this->returnSuccess(200, 'this Exam is added succssfuly' );
+            return $this->returnSuccess(200, 'this Exam is added succssfuly', $lastNewExam );
 
         }catch(\Exception $ex){
             return $this->returnError(422, 'sorry this is an error');
@@ -106,7 +106,7 @@ class ExamController extends Controller
     }
     public function getAllExams(){
         try{
-            $exams = Exam::get();
+            $exams = Exam::paginate(PAGINATION_COUNT);
             return $this->returnData(200, 'there is all exams', $exams);
         }
         catch(\Exception $ex){

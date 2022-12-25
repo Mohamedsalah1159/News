@@ -28,7 +28,8 @@ class AnswerController extends Controller
                 'question_id' => $request->question_id,
                 
             ]);
-            return $this->returnSuccess(200, 'this answer is added succssfuly' );
+            $lastAnswer = Answer::latest('id')->first();
+            return $this->returnSuccess(200, 'this answer is added succssfuly', $lastAnswer );
 
         }catch(\Exception $ex){
             return $this->returnError(422, 'sorry this is an error');

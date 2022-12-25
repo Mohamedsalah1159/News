@@ -69,8 +69,8 @@ class NewsController extends Controller
                 ]);
 
             }
-
-            return $this->returnSuccess(200, 'this News is added succssfuly' );
+            $lastNew = News::with(['idimage', 'source', 'words'])->latest('id')->first();
+            return $this->returnSuccess(200, 'this News is added succssfuly', $lastNew );
 
         }catch(\Exception $ex){
             return $ex;

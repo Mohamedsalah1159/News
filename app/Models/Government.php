@@ -11,6 +11,7 @@ class Government extends Model
     protected $fillable = [
         'id',
         'name',
+        'governmentStatus',
         'registration_status',
         'created_at',
         'updated_at'
@@ -19,6 +20,12 @@ class Government extends Model
         'created_at',
         'updated_at'  
     ];
+    public function getGovernmentStatusAttribute(){
+        return $this->attributes['governmentStatus'] == 0 ? 'Basic Government' : 'Sub Government';
+    }
+    public function getRegistrationAttribute(){
+        return $this->attributes['registration_status'] == 0 ? 'non-register' : 'Can register';
+    }
     //relations 
     public function news(){
         return $this->hasMany('App\Models\News', 'government_id', 'id');

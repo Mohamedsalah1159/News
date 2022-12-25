@@ -29,7 +29,8 @@ class FounderController extends Controller
                 'img' => $file_path
 
             ]);
-            return $this->returnSuccess(200, 'this founder is added succssfuly' );
+            $lastFounder = Founder::latest('id')->first();
+            return $this->returnSuccess(200, 'this founder is added succssfuly', $lastFounder );
 
         }catch(\Exception $ex){
             return $this->returnError(422, 'sorry this is an error');
@@ -38,7 +39,7 @@ class FounderController extends Controller
     }
     public function getAllFounder(){
         try{
-            $founder = Founder::select('*')->get();
+            $founder = Founder::select('*')->paginate(PAGINATION_COUNT);
             return $this->returnData(200, 'there is all founders', $founder);
         }
         catch(\Exception $ex){

@@ -17,6 +17,7 @@ class GovernmentController extends Controller
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string|max:191|unique:governments',
                 'registration_status' => 'boolean|required',
+                'governmentStatus' => 'boolean|required'
             ]);
             if ($validator->fails()) {
                 return $this->returnError(422, 'sorry this is an error in validation', 'Error', $validator->errors());
@@ -24,10 +25,12 @@ class GovernmentController extends Controller
             //store request in db
             Government::create([
                 'name' => $request->name,
-                'registration_status' => $request->registration_status
+                'registration_status' => $request->registration_status,
+                'governmentStatus' => $request->governmentStatus
             ]);
+            $lastGovernment = Government::latest('id')->first();
 
-            return $this->returnSuccess(200, 'this Government is added succssfuly' );
+            return $this->returnSuccess(200, 'this Government is added succssfuly', $lastGovernment );
 
         }catch(\Exception $ex){
             return $this->returnError(422, 'sorry this is an error');
@@ -54,6 +57,27 @@ class GovernmentController extends Controller
             return $this->returnError(422, 'sorry this is an error');
         }
     }
+        public function changeGovernmentStatus($id){
+        try{
+            $government = Government::find($id);
+            if(! $government){
+                return $this->returnError(422, 'sorry this is not exists');
+            }
+            if($government['governmentStatus'] == 1){
+                $government->update([
+                    'governmentStatus' => 0
+                ]);
+                return $this->returnSuccess(200, 'this Government is Basic Government succssfully' );
+            }else{
+                $government->update([
+                    'governmentStatus' => 1
+                ]);
+                return $this->returnSuccess(200, 'this Government is sub Government succssfuly' );
+            }
+        }catch(\Exception $ex){
+            return $this->returnError(422, 'sorry this is an error');
+        }
+    }
     public function update(Request $request, $id){
         try{
             //find intiative
@@ -65,6 +89,7 @@ class GovernmentController extends Controller
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string|max:191',
                 'registration_status' => 'boolean|required',
+                'governmentStatus' => 'boolean|required',
             ]);
             if ($validator->fails()) {
                 return $this->returnError(422, 'sorry this is an error in validation', 'Error', $validator->errors());
@@ -72,10 +97,11 @@ class GovernmentController extends Controller
             //store request in db
             $government->update([
                 'name' => $request->name,
-                'registration_status' => $request->registration_status
+                'registration_status' => $request->registration_status,
+                'governmentStatus' => $request->governmentStatus
             ]);
 
-            return $this->returnSuccess(200, 'this Initiative is updated succssfuly' );
+            return $this->returnSuccess(200, 'this Government is updated succssfuly' );
 
         }catch(\Exception $ex){
             return $this->returnError(422, 'sorry this is an error');
@@ -98,11 +124,28 @@ class GovernmentController extends Controller
     public function getAll(){
         try{
             $government = Government::select("*")->with(['news'])->paginate(PAGINATION_COUNT);
+            return $this->returnData(200, 'there is all government', $government);
             
-            if($government->count() >= 1){
-                return $this->returnData(200, 'there is all government', $government);
-            }
-            return $this->returnError(422, 'sorry this is no data');
+        }catch(\Exception $ex){
+            return $this->returnError(422, 'sorry this is an error');
+        }
+    }
+    public function getAllBasics(){
+        try{
+            $government = Government::select("*")->with(['news'])->where('governmentStatus', 0)->paginate(PAGINATION_COUNT);
+            
+            return $this->returnData(200, 'there is all government', $government);
+            
+        }catch(\Exception $ex){
+            return $this->returnError(422, 'sorry this is an error');
+        }
+    }
+    public function getAllSubGovernment(){
+        try{
+            $government = Government::select("*")->with(['news'])->where('governmentStatus', 1)->paginate(PAGINATION_COUNT);
+            
+            return $this->returnData(200, 'there is all government', $government);
+            
         }catch(\Exception $ex){
             return $this->returnError(422, 'sorry this is an error');
         }
