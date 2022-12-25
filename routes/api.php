@@ -19,6 +19,7 @@ Route::group(['namespace'=>'App\Http\Controllers'], function(){
     Route::post('login', 'AuthController@login');
     Route::post('register', 'AuthController@register');
     Route::post('logout', 'AuthController@logout');
+    Route::post('refresh', 'AuthController@refresh');
     Route::get('user-profile', 'AuthController@userProfile');
     ##################### end rejester and login and out ##############
         Route::group(['middleware' => 'auth:api'], function(){
