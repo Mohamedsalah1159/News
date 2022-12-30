@@ -16,7 +16,7 @@ class CreateGallaryTable extends Migration
         Schema::create('gallary', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->unsignedBigInteger('folder_id');
+            $table->unsignedBigInteger('folder_id')->nullable();
             $table->foreign('folder_id')->references('id')->on('folders')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedBigInteger('employee_id')->nullable();
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade')->onUpdate('cascade');

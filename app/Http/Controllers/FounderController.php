@@ -27,7 +27,7 @@ class FounderController extends Controller
                 'name' => $request->name,
                 'desc' => $request->desc,
                 'img' => $file_path
-                
+
             ]);
             return $this->returnSuccess(200, 'this founder is added succssfuly' );
 

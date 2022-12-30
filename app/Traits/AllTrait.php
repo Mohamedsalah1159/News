@@ -18,14 +18,14 @@ trait AllTrait
             'status' => $status,
             'message' => $msg,
             $key => $value
-            
+
         ], $status);
     }
-    public function returnSuccess($status=200, $msg='', $key = null, $data= null){
+    public function returnSuccess($status=200, $msg='',$value= null){
         return response()->json([
             'status' => $status,
             'message' => $msg,
-            $key => $data
+            'data' => $value
         ], $status);
     }
     public function returnData($status=200, $msg='' ,$value=null){

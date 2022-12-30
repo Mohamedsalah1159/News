@@ -21,7 +21,7 @@ class Gallary extends Model
         'updated_at'
     ];
     public function getNameAttribute(){
-        return base_path('public\gallary\\' .$this->attributes['name']); 
+        return asset('gallary/' . $this->attributes['img']);
     }
     // relations
     public function employee(){
@@ -30,5 +30,5 @@ class Gallary extends Model
     public function folder(){
         return $this->belongsTo('App\Models\Folder', 'folder_id', 'id');
     }
-    
+
 }

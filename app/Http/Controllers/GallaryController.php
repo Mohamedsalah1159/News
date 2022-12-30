@@ -18,17 +18,17 @@ class GallaryController extends Controller
             $validator = Validator::make($request->all(), [
                 'name' => 'required',
                 'name.*' => 'image|mimes:jpeg,png,jpg,gif,svg',
-                'folder_id' => 'required|integer',
+                'folder_id' => 'integer',
             ]);
-     
+
             if ($validator->fails()) {
                 return $this->returnError(422, 'sorry this is an error', 'Error', $validator->errors());
             }
             // save photo in folder
-                        // insert into db 
+                        // insert into db
+
             if($request->hasFile('name')){
                 foreach($request->name as $src){
-                    
                     $file_extentions = $src->getClientOriginalExtension();
                     $file_name = uniqid('', true) . '.' . $file_extentions;
                     $src->move("gallary", $file_name);
@@ -37,9 +37,11 @@ class GallaryController extends Controller
                         'folder_id' => $request->folder_id
 
                     ]);
+                    $lastImgAdded=count($request->name);
+                    $lastImage = Gallary::select("id")->latest('id')->take($lastImgAdded)->get();
                 }
 
-                return $this->returnSuccess(200, 'photo is added succssfuly' );
+                return $this->returnSuccess(200, 'photo is added succssfuly', $lastImage);
 
 
             }
@@ -49,6 +51,7 @@ class GallaryController extends Controller
 
 
         } catch (\Exception $ex) {
+            return $ex;
             return $this->returnError(422, 'sorry this is an error');
         }
     }
@@ -60,7 +63,7 @@ class GallaryController extends Controller
             return $this->returnError(422, 'sorry this is an error');
 
         }
-        
+
     }
     public function destroy($id){
         try{
@@ -77,6 +80,7 @@ class GallaryController extends Controller
             return $this->returnError(422, 'sorry this id not exists');
 
         }catch(\Exception $ex){
+            return $ex;
             return $this->returnError(422, 'sorry this is an error');
 
         }

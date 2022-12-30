@@ -19,7 +19,7 @@ class Newsimage extends Model
         'updated_at'
     ];
     public function getNameAttribute(){
-        return base_path('public\newsimages\\' .$this->attributes['name']); 
+        return asset('newsimages/' . $this->attributes['img']);
     }
     //relations
     public function idImages(){

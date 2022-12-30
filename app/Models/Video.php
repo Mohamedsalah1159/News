@@ -20,6 +20,6 @@ class Video extends Model
         'updated_at'
     ];
     public function getNameAttribute(){
-        return base_path('public\video\\' .$this->attributes['name']); 
+        return asset('video/' . $this->attributes['name']);
     }
 }

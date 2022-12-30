@@ -19,7 +19,7 @@ Route::group(['namespace'=>'App\Http\Controllers'], function(){
     Route::post('login', 'AuthController@login');
     Route::post('register', 'AuthController@register');
     Route::post('logout', 'AuthController@logout');
-    Route::get('user-profile', 'AuthController@userProfile'); 
+    Route::get('user-profile', 'AuthController@userProfile');
     ##################### end rejester and login and out ##############
         Route::group(['middleware' => 'auth:api'], function(){
         ############## start gallary ###############
@@ -59,7 +59,7 @@ Route::group(['namespace'=>'App\Http\Controllers'], function(){
         Route::post('updateExam/{id}', 'ExamController@update');
         Route::post('deleteExam/{id}', 'ExamController@destroy');
         ################### end exam #############
-        
+
         });
     ############## start gallary ###############
     Route::get('getallgallary', 'GallaryController@getAllGallary');
@@ -129,7 +129,7 @@ Route::group(['namespace'=>'App\Http\Controllers'], function(){
         #################start newsImages ##############
         Route::get('getAllNewsImages/{id}', 'NewsimagesController@getAll');
         ################### end newsImages #############
-        
+
     });
     ################# start Initiatives #########################
     Route::group(['namespace' => 'Initiative'], function(){
@@ -138,7 +138,7 @@ Route::group(['namespace'=>'App\Http\Controllers'], function(){
         Route::post('update-initiative/{id}', 'InitiativeController@update');
         Route::post('delete-initiative/{id}', 'InitiativeController@destroy');
        });
-       
+
        Route::get('getOne-initiative/{id}', 'InitiativeController@getOne');
        Route::get('getAll-initiative', 'InitiativeController@getAll');
     });
@@ -180,6 +180,7 @@ Route::group(['namespace'=>'App\Http\Controllers'], function(){
 
          });
          #################### end government #######################
-    
+
 });
+
 

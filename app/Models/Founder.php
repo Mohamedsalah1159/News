@@ -22,6 +22,6 @@ class Founder extends Model
         'updated_at'
     ];
     public function getImgAttribute(){
-        return base_path('public\founders\\' .$this->attributes['img']); 
+        return asset('founders/' . $this->attributes['img']);
     }
 }
