@@ -59,7 +59,7 @@ class FounderController extends Controller
             return $this->returnSuccess(200, 'This img successfuly Deleted');
 
             }
-            return $this->returnError(422, 'sorry this id not exists');
+            return $this->returnError(200, 'sorry this id not exists');
 
         }catch(\Exception $ex){
             return $this->returnError(422, 'sorry this is an error');

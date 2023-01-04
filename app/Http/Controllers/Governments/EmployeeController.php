@@ -58,7 +58,7 @@ class EmployeeController extends Controller
             //find intiative
             $employee = Employee::find($id);
             if(! $employee){
-                return $this->returnError(422, 'sorry this is not exists');
+                return $this->returnError(200, 'sorry this is not exists');
             }
             //validate request
             $validator = Validator::make($request->all(), [
@@ -115,7 +115,7 @@ class EmployeeController extends Controller
         try{
             $employee = Employee::with('gallary')->find($id);
             if(! $employee){
-                return $this->returnError(422, 'sorry this is not exists');
+                return $this->returnError(200, 'sorry this is not exists');
             }
             return $this->returnData(200, 'there is employee', $employee);
 
@@ -147,7 +147,7 @@ class EmployeeController extends Controller
                 return $this->returnSuccess(200, 'This employee successfuly Deleted');
 
             }
-            return $this->returnError(422, 'sorry this id not exists');
+            return $this->returnError(200, 'sorry this id not exists');
 
         }catch(\Exception $ex){
             return $ex;

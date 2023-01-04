@@ -17,22 +17,44 @@ class GovernmentController extends Controller
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string|max:191|unique:governments',
                 'registration_status' => 'boolean|required',
-                'governmentStatus' => 'boolean|required'
+                'governmentStatus' => 'boolean|required',
+                'parent_id' => 'integer'
             ]);
             if ($validator->fails()) {
                 return $this->returnError(422, 'sorry this is an error in validation', 'Error', $validator->errors());
+            }
+            $ids = Government::select('id')->where('parent_id', 0)->get();
+            $newIds = $ids->pluck('id')->toArray();
+            if($request->governmentStatus == 1){
+                if((in_array($request->parent_id , $newIds)) == 1){
+                    $parent = $request->parent_id;
+                }
+                else{
+                    return $this->returnError(422, 'sorry this is No parent has this id');
+                }
+            }else{
+                if($request->parent_id != 0){
+                    return $this->returnError(422, 'sorry this government is basic cant add parent');
+                }else{
+                    $parent = $request->parent_id;
+                }
+                $parent = 0;
+    
             }
             //store request in db
             Government::create([
                 'name' => $request->name,
                 'registration_status' => $request->registration_status,
-                'governmentStatus' => $request->governmentStatus
+                'governmentStatus' => $request->governmentStatus,
+                'parent_id' => $parent
             ]);
+
             $lastGovernment = Government::latest('id')->first();
 
             return $this->returnSuccess(200, 'this Government is added succssfuly', $lastGovernment );
 
         }catch(\Exception $ex){
+            return $ex;
             return $this->returnError(422, 'sorry this is an error');
         }
     }
@@ -40,7 +62,7 @@ class GovernmentController extends Controller
         try{
             $government = Government::find($id);
             if(! $government){
-                return $this->returnError(422, 'sorry this is not exists');
+                return $this->returnError(200, 'sorry this is not exists');
             }
             if($government['registration_status'] == 1){
                 $government->update([
@@ -57,22 +79,39 @@ class GovernmentController extends Controller
             return $this->returnError(422, 'sorry this is an error');
         }
     }
-        public function changeGovernmentStatus($id){
+        public function changeGovernmentStatus(Request $request, $id){
         try{
             $government = Government::find($id);
             if(! $government){
-                return $this->returnError(422, 'sorry this is not exists');
+                return $this->returnError(200, 'sorry this is not exists');
             }
-            if($government['governmentStatus'] == 1){
+            //validate request
+            $validator = Validator::make($request->all(), [
+                'parent_id' => 'required|integer'
+            ]);
+            if ($validator->fails()) {
+                return $this->returnError(422, 'sorry this is an error in validation', 'Error', $validator->errors());
+            }
+            if($government->governmentStatus == 'Sub Government'){
                 $government->update([
-                    'governmentStatus' => 0
+                    'governmentStatus' => 0,
+                    'parent_id' => 0
                 ]);
                 return $this->returnSuccess(200, 'this Government is Basic Government succssfully' );
             }else{
+                $ids = Government::select('id')->where('parent_id', 0)->get();
+                $newIds = $ids->pluck('id')->toArray();
+                if((in_array($request->parent_id , $newIds)) == 1){
+                    $parent = $request->parent_id;
+                }
+                else{
+                    return $this->returnError(422, 'sorry this is No parent has this id');
+                }
                 $government->update([
-                    'governmentStatus' => 1
+                    'governmentStatus' => 1,
+                    'parent_id' => $parent
                 ]);
-                return $this->returnSuccess(200, 'this Government is sub Government succssfuly' );
+                return $this->returnSuccess(200, 'this Government is changed status succssfuly' );
             }
         }catch(\Exception $ex){
             return $this->returnError(422, 'sorry this is an error');
@@ -83,22 +122,42 @@ class GovernmentController extends Controller
             //find intiative
             $government = Government::find($id);
             if(! $government){
-                return $this->returnError(422, 'sorry this is not exists');
+                return $this->returnError(200, 'sorry this is not exists');
             }
             //validate request
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string|max:191',
                 'registration_status' => 'boolean|required',
                 'governmentStatus' => 'boolean|required',
+                'parent_id' => 'integer'
             ]);
             if ($validator->fails()) {
                 return $this->returnError(422, 'sorry this is an error in validation', 'Error', $validator->errors());
+            }
+            $ids = Government::select('id')->where('parent_id', 0)->get();
+            $newIds = $ids->pluck('id')->toArray();
+            if($request->governmentStatus == 1){
+                if((in_array($request->parent_id , $newIds)) == 1){
+                    $parent = $request->parent_id;
+                }
+                else{
+                    return $this->returnError(422, 'sorry this is No parent has this id');
+                }
+            }else{
+                if($request->parent_id != 0){
+                    return $this->returnError(422, 'sorry this government is basic cant add parent');
+                }else{
+                    $parent = $request->parent_id;
+                }
+                $parent = 0;
+    
             }
             //store request in db
             $government->update([
                 'name' => $request->name,
                 'registration_status' => $request->registration_status,
-                'governmentStatus' => $request->governmentStatus
+                'governmentStatus' => $request->governmentStatus,
+                'parent_id' => $parent
             ]);
 
             return $this->returnSuccess(200, 'this Government is updated succssfuly' );
@@ -111,11 +170,11 @@ class GovernmentController extends Controller
         try{
             $government = Government::find($id);
             if(! $government){
-                return $this->returnError(422, 'sorry this is not exists');
+                return $this->returnError(200, 'sorry this is not exists');
             }
-            $oneGovernment = $government->with(['news'])->where('id', $id)->first();
+            $oneGovernment = $government->with(['news', 'child'])->where('id', $id)->first();
 
-            return $this->returnData(200, 'there is all initiative', $oneGovernment);
+            return $this->returnData(200, 'there is government', $oneGovernment);
             
         }catch(\Exception $ex){
             return $this->returnError(422, 'sorry this is an error');
@@ -123,7 +182,7 @@ class GovernmentController extends Controller
     }
     public function getAll(){
         try{
-            $government = Government::select("*")->with(['news'])->paginate(PAGINATION_COUNT);
+            $government = Government::select("*")->with(['news', 'child'])->paginate(PAGINATION_COUNT);
             return $this->returnData(200, 'there is all government', $government);
             
         }catch(\Exception $ex){
@@ -132,7 +191,7 @@ class GovernmentController extends Controller
     }
     public function getAllBasics(){
         try{
-            $government = Government::select("*")->with(['news'])->where('governmentStatus', 0)->paginate(PAGINATION_COUNT);
+            $government = Government::select("*")->with(['news', 'child'])->where('governmentStatus', 0)->paginate(PAGINATION_COUNT);
             
             return $this->returnData(200, 'there is all government', $government);
             
@@ -158,12 +217,14 @@ class GovernmentController extends Controller
             $government->news()->delete();
             //delete employee with relation in initiative
             $government->employee()->delete();
+            //delete sub governments
+            $government->child()->delete();
             //delete from database
             $government->delete();
             return $this->returnSuccess(200, 'This government successfuly Deleted');
 
             }
-            return $this->returnError(422, 'sorry this id not exists');
+            return $this->returnError(200, 'sorry this id not exists');
 
         }catch(\Exception $ex){
             return $this->returnError(422, 'sorry this is an error');

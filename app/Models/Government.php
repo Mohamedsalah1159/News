@@ -13,6 +13,7 @@ class Government extends Model
         'name',
         'governmentStatus',
         'registration_status',
+        'parent_id',
         'created_at',
         'updated_at'
     ];
@@ -32,5 +33,8 @@ class Government extends Model
     }
     public function employee(){
         return $this->hasMany('App\Models\Employee', 'government_id', 'id');
+    }
+    public function child(){
+        return $this->hasMany('App\Models\Government', 'parent_id', 'id');
     }
 }

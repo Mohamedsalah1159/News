@@ -39,7 +39,7 @@ class InitiativeController extends Controller
             //find intiative
             $initiative = Initiative::find($id);
             if(! $initiative){
-                return $this->returnError(422, 'sorry this is not exists');
+                return $this->returnError(200, 'sorry this is not exists');
             }
             //validate request
             $validator = Validator::make($request->all(), [
@@ -65,7 +65,7 @@ class InitiativeController extends Controller
         try{
             $initiative = Initiative::find($id);
             if(! $initiative){
-                return $this->returnError(422, 'sorry this is not exists');
+                return $this->returnError(200, 'sorry this is not exists');
             }
             $oneInitiative = $initiative->with(['news'])->where('id', $id)->first();
 
@@ -96,7 +96,7 @@ class InitiativeController extends Controller
             return $this->returnSuccess(200, 'This initiative successfuly Deleted');
 
             }
-            return $this->returnError(422, 'sorry this id not exists');
+            return $this->returnError(200, 'sorry this id not exists');
 
         }catch(\Exception $ex){
             return $this->returnError(422, 'sorry this is an error');

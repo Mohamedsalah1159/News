@@ -18,7 +18,7 @@ class WordsController extends Controller
             if($word->count() >= 1){
                 return $this->returnData(200, 'there is all words', $word);
             }
-            return $this->returnError(422, 'sorry this is not exists');
+            return $this->returnError(200, 'sorry this is not exists');
 
         }
         catch(\Exception $ex){
@@ -34,7 +34,7 @@ class WordsController extends Controller
             return $this->returnSuccess(200, 'This word successfuly Deleted');
 
             }
-            return $this->returnError(422, 'sorry this id not exists');
+            return $this->returnError(200, 'sorry this id not exists');
 
         }catch(\Exception $ex){
             return $this->returnError(422, 'sorry this is an error');

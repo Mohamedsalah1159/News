@@ -41,7 +41,7 @@ class AnswerController extends Controller
             //find answer
             $answer = Answer::find($id);
             if(! $answer){
-                return $this->returnError(422, 'sorry this is not exists');
+                return $this->returnError(200, 'sorry this is not exists');
             }
             //validate request
             $validator = Validator::make($request->all(), [
@@ -67,7 +67,7 @@ class AnswerController extends Controller
         try{
             $status = Answer::find($id);
             if(!$status){
-                return $this->returnError(422, 'sorry this is not exists');
+                return $this->returnError(200, 'sorry this is not exists');
             }
             $newstatus = $status->status == 0 ? 1 : 0;
             $status->update(['status' => $newstatus]);
@@ -84,7 +84,7 @@ class AnswerController extends Controller
                 $answer = answer::select('*')->where('question_id', $id)->get();
                 return $this->returnData(200, 'there is all answer about this question', $answer);
             }else{
-                return $this->returnError(422, 'sorry this is not exists');
+                return $this->returnError(200, 'sorry this is not exists');
             }
 
         }
@@ -102,7 +102,7 @@ class AnswerController extends Controller
             return $this->returnSuccess(200, 'This answer successfuly Deleted');
 
             }
-            return $this->returnError(422, 'sorry this id not exists');
+            return $this->returnError(200, 'sorry this id not exists');
 
         }catch(\Exception $ex){
             return $this->returnError(422, 'sorry this is an error');

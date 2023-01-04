@@ -53,7 +53,7 @@ class NewsimagesController extends Controller
         try{
             $news = News::find($id);
             if(!$news){
-                return $this->returnError(422, 'sorry this is not exists');
+                return $this->returnError(200, 'sorry this is not exists');
             }
             $getID = $news->with(['idimage' => function($q){
                 $q->select('id_image', 'news_i_id');
@@ -87,7 +87,7 @@ class NewsimagesController extends Controller
             return $this->returnSuccess(200, 'This img successfuly Deleted');
 
             }
-            return $this->returnError(422, 'sorry this id not exists');
+            return $this->returnError(200, 'sorry this id not exists');
 
         }catch(\Exception $ex){
             return $this->returnError(422, 'sorry this is an error');

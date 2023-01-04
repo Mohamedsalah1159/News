@@ -17,7 +17,7 @@ class SourceController extends Controller
             if($source->count() >= 1){
                 return $this->returnData(200, 'there is all sources', $source);
             }
-            return $this->returnError(422, 'sorry this is not exists');
+            return $this->returnError(200, 'sorry this is not exists');
 
         }
         catch(\Exception $ex){
@@ -33,7 +33,7 @@ class SourceController extends Controller
             return $this->returnSuccess(200, 'This source successfuly Deleted');
 
             }
-            return $this->returnError(422, 'sorry this id not exists');
+            return $this->returnError(200, 'sorry this id not exists');
 
         }catch(\Exception $ex){
             return $this->returnError(422, 'sorry this is an error');

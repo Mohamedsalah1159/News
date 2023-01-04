@@ -41,7 +41,7 @@ class QuestionController extends Controller
             //find question
             $question = Question::find($id);
             if(! $question){
-                return $this->returnError(422, 'sorry this is not exists');
+                return $this->returnError(200, 'sorry this is not exists');
             }
             //validate request
             $validator = Validator::make($request->all(), [
@@ -80,7 +80,7 @@ class QuestionController extends Controller
             //find folder
             $question = Question::with('answer')->find($id);
             if(! $question){
-                return $this->returnError(422, 'sorry this is not exists');
+                return $this->returnError(200, 'sorry this is not exists');
             }
             return $this->returnData(200, 'this is question with his answer', $question);
         }
@@ -100,7 +100,7 @@ class QuestionController extends Controller
             return $this->returnSuccess(200, 'This question successfuly Deleted');
 
             }
-            return $this->returnError(422, 'sorry this id not exists');
+            return $this->returnError(200, 'sorry this id not exists');
 
         }catch(\Exception $ex){
             return $this->returnError(422, 'sorry this is an error');
