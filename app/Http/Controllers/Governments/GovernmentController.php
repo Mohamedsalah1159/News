@@ -174,11 +174,13 @@ class GovernmentController extends Controller
             if(! $government){
                 return $this->returnError(200, 'sorry this is not exists');
             }
-            $oneGovernment = $government->with(['news', 'child'])->where('id', $id)->first();
-
-            return $this->returnData(200, 'there is government', $oneGovernment);
+            $oneGovernment = collect($government->with(['news'])->where('id', $id)->first());
+            $child = $government->child();
+            $mearged = $oneGovernment->concat($child);
+            return $this->returnData(200, 'there is government', $mearged);
             
         }catch(\Exception $ex){
+            return $ex;
             return $this->returnError(422, 'sorry this is an error');
         }
     }
@@ -208,6 +210,7 @@ class GovernmentController extends Controller
             return $this->returnData(200, 'there is all government', $government);
             
         }catch(\Exception $ex){
+            return $ex;
             return $this->returnError(422, 'sorry this is an error');
         }
     }

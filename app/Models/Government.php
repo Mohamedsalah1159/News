@@ -28,6 +28,10 @@ class Government extends Model
     public function getRegistrationAttribute(){
         return $this->attributes['registration_status'] == 0 ? 'non-register' : 'Can register';
     }
+    public function getParentIdAttribute(){
+        $parent = Government::select('name')->where('id', $this->attributes['parent_id'])->first();
+        return $this->attributes['parent_id'] == 0 ? 'Basic non have parent' : $parent->name;
+    }
     //relations 
     public function news(){
         return $this->hasMany('App\Models\News', 'government_id', 'id');
@@ -36,6 +40,6 @@ class Government extends Model
         return $this->hasMany('App\Models\Employee', 'government_id', 'id');
     }
     public function child(){
-        return $this->hasMany('App\Models\Government', 'parent_id', 'id');
+        return $this->where('parent_id', $this->id)->get();
     }
 }

@@ -20,6 +20,7 @@ class CreateExamsTable extends Migration
             $table->time('appointment_time');
             $table->string('time');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
