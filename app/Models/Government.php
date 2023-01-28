@@ -11,6 +11,7 @@ class Government extends Model
     protected $fillable = [
         'id',
         'name',
+        'desc',
         'governmentStatus',
         'registration_status',
         'parent_id',

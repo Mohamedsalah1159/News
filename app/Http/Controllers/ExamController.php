@@ -23,8 +23,7 @@ class ExamController extends Controller
                 'appointment_time' => 'required|date_format:"H:i',
                 'appointment' => "required|after:date('Y-m-d')",
                 'time' => 'required|integer|min:1|max:24',
-                'user_id' => 'required',
-                'user_id.*' => 'required|integer',
+                'user_id.*' => 'integer',
             ]);
 
             if ($validator->fails()) {
@@ -49,6 +48,7 @@ class ExamController extends Controller
             return $this->returnSuccess(200, 'this Exam is added succssfuly', $lastNewExam );
 
         }catch(\Exception $ex){
+            return $ex;
             return $this->returnError(422, 'sorry this is an error');
         }
 

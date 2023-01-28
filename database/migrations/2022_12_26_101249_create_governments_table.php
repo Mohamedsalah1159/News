@@ -16,6 +16,7 @@ class CreateGovernmentsTable extends Migration
         Schema::create('governments', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->text('desc')->nullable();
             $table->boolean('governmentStatus')->default(0)->comment('0=>basec 1=>sub ');
             $table->boolean('registration_status')->default(0)->comment('0=>non register(false) 1=>can register(true) ');
             $table->unsignedBigInteger('parent_id')->default(0);

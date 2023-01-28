@@ -41,7 +41,7 @@ class QuestionController extends Controller
             return $this->returnSuccess(200, 'this questions are added succssfuly');
 
         }catch(\Exception $ex){
-            return $this->returnError(422, 'sorry this is an error');
+            return $this->returnError(422, $ex);
         }
 
     }

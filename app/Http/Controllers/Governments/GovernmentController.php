@@ -44,6 +44,7 @@ class GovernmentController extends Controller
             //store request in db
             Government::create([
                 'name' => $request->name,
+                'desc' => $request->desc,
                 'registration_status' => $request->registration_status,
                 'governmentStatus' => $request->governmentStatus,
                 'parent_id' => $parent
@@ -155,6 +156,7 @@ class GovernmentController extends Controller
             //store request in db
             $government->update([
                 'name' => $request->name,
+                'desc' => $request->desc,
                 'registration_status' => $request->registration_status,
                 'governmentStatus' => $request->governmentStatus,
                 'parent_id' => $parent
@@ -196,7 +198,7 @@ class GovernmentController extends Controller
             return $this->returnData(200, 'there is all government', $government);
             
         }catch(\Exception $ex){
-            return $this->returnError(422, 'sorry this is an error');
+            return $ex;
         }
     }
     public function getAllSubGovernment(){

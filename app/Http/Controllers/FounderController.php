@@ -33,6 +33,7 @@ class FounderController extends Controller
             return $this->returnSuccess(200, 'this founder is added succssfuly', $lastFounder );
 
         }catch(\Exception $ex){
+            return $ex;
             return $this->returnError(422, 'sorry this is an error');
         }
 
