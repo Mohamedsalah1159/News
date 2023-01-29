@@ -226,6 +226,23 @@ class NewsController extends Controller
             return $this->returnError(422, 'sorry this is an error');
         }
     }
+    public function search(Request $request){
+        $search_input = $request->input('search_input');
+        $allNews = News::with(['governorate', 'source', 'idimage', 'words'])->paginate(PAGINATION_COUNT);
+        if ($search_input == '') {
+            $news = News::with(['governorate', 'source', 'idimage', 'words'])->paginate(PAGINATION_COUNT);
+        }else{
+            if ($search_input){
+                $newsName = News::with(['governorate', 'source', 'idimage', 'words'])->where('name', 'LIKE', '%' . $search_input . '%')->paginate(PAGINATION_COUNT);
+            }
+            // if ($search_input){
+            //     $newsWord = News::where('name_ar', 'LIKE', '%' . $search_input . '%')->where('status',1)->get();
+            // }
+            $news = $newsName;//->merge($services_ar);
+        }
+        return $this->returnData(200, 'there is all news', $news);
+
+    }
     public function destroy($id){
         try{
             $news = News::find($id);

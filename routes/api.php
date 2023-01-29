@@ -22,7 +22,16 @@ Route::group(['namespace'=>'App\Http\Controllers'], function(){
     Route::post('refresh', 'AuthController@refresh');
     Route::get('user-profile', 'AuthController@userProfile');
     ##################### end rejester and login and out ##############
-        Route::group(['middleware' => 'auth:api'], function(){
+        Route::group(['middleware' => ['auth:api','admin']], function(){
+        ###################### start User ##############################
+        /*Route::post('changeUserStatus/{id}', 'UserController@changeUserStatus');*/
+        Route::get('getAllAdmins', 'UserController@getAllAdmins');
+        ######################## end User ##############################
+        ############## start courses ###############
+        Route::post('saveCourse', 'CoursesController@store');
+        Route::post('updateCourse/{id}', 'CoursesController@update');
+        Route::post('deleteCourse/{id}', 'CoursesController@destroy');
+        ##############end courses##################
         ############## start gallary ###############
         Route::post('savegallary', 'GallaryController@store');
         Route::post('removegallary/{id}', 'GallaryController@destroy');
@@ -44,6 +53,9 @@ Route::group(['namespace'=>'App\Http\Controllers'], function(){
         Route::post('updateFolder/{id}', 'FolderController@update');
         Route::post('deleteFolder/{id}', 'FolderController@destroy');
         ################### end folder #############
+        ################### start setting ###############
+        Route::post('updateSetting', 'SettingController@update');
+        ################### end setting ##################
         #################start question ##############
         Route::post('createQuestion', 'QuestionController@store');
         Route::post('updateQuestion/{id}', 'QuestionController@update');
@@ -60,11 +72,22 @@ Route::group(['namespace'=>'App\Http\Controllers'], function(){
         Route::post('updateExam/{id}', 'ExamController@update');
         Route::post('deleteExam/{id}', 'ExamController@destroy');
         ################### end exam #############
+        #################start examWithUsers ##############
+        Route::post('createExamWithUser', 'ExamUserController@store');
+        ################### end examWithUsers #############
 
         });
+    ############## start users ###############
+    Route::get('getallusers', 'UserController@getAllUsers');
+    Route::get('getUser/{id}', 'UserController@getUser');
+    ##############end users##################
     ############## start gallary ###############
     Route::get('getallgallary', 'GallaryController@getAllGallary');
     ##############end gallary##################
+    ############## start courses ###############
+    Route::get('getAllCourses', 'CoursesController@getAllCourses');
+    Route::get('getOneCourse/{id}', 'CoursesController@getOneCourse');
+    ##############end courses##################
     #################start video ##############
     Route::get('getallvideos', 'VideoContoller@getAllVideos');
     ################### end video #############
@@ -75,6 +98,9 @@ Route::group(['namespace'=>'App\Http\Controllers'], function(){
     Route::get('getallfolders', 'FolderController@getAllFolders');
     Route::get('getaOneFolder/{id}', 'FolderController@getOneFolder');
     ################### end folder #############
+    ################### start setting ###############
+    Route::get('getSetting', 'SettingController@getSetting');
+    ################### end setting ##################
     #################start exam ##############
     Route::get('getallExams', 'ExamController@getAllExams');
     Route::get('getaOneExam/{id}', 'ExamController@getOneExam');
@@ -101,6 +127,7 @@ Route::group(['namespace'=>'App\Http\Controllers'], function(){
             Route::post('changeconstnews/{id}', 'NewsController@changeConst');
             Route::get('getallnews', 'NewsController@getAllNews');
             Route::get('getallnewsconst', 'NewsController@getAllNewsConst');
+            Route::post('search', 'NewsController@search');
             Route::post('removenews/{id}', 'NewsController@destroy');
             ################### end news #############
             #################start words ##############

@@ -176,7 +176,7 @@ class GovernmentController extends Controller
             }
             $oneGovernment = collect($government->with(['news'])->where('id', $id)->first());
             $child = $government->child();
-            $mearged = $oneGovernment->concat($child);
+            $mearged = $oneGovernment->put('child', $child);
             return $this->returnData(200, 'there is government', $mearged);
             
         }catch(\Exception $ex){

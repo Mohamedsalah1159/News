@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Traits\AllTrait;
 use App\Models\Exam;
-use App\Models\ExamUser;
 use App\Models\Question;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
@@ -23,7 +22,6 @@ class ExamController extends Controller
                 'appointment_time' => 'required|date_format:"H:i',
                 'appointment' => "required|after:date('Y-m-d')",
                 'time' => 'required|integer|min:1|max:24',
-                'user_id.*' => 'integer',
             ]);
 
             if ($validator->fails()) {
@@ -36,15 +34,6 @@ class ExamController extends Controller
                 'appointment' => $request->appointment,
                 'time' => $request->time . " hours",
             ]);
-            $lastNewExam = Exam::select('id')->latest('id')->first();
-            $users = $request->user_id;
-            foreach ($users as $user){
-                ExamUser::create([
-                    'user_id' => $user,
-                    'exam_id' => $lastNewExam->id
-                ]);
-            }
-
             return $this->returnSuccess(200, 'this Exam is added succssfuly', $lastNewExam );
 
         }catch(\Exception $ex){
@@ -78,7 +67,7 @@ class ExamController extends Controller
                 'appointment' => $request->appointment,
                 'time' => $request->time . " hours",
             ]);
-            $examUser = ExamUser::select('user_id')->where('exam_id', $exam->id)->get();
+            /*$examUser = ExamUser::select('user_id')->where('exam_id', $exam->id)->get();
             $examUserAll = json_decode($examUser, true);
             foreach($examUserAll as $one){
                 $users = $request->user_id;
@@ -95,7 +84,7 @@ class ExamController extends Controller
     
                     }
                 }
-            }
+            }*/
             return $this->returnSuccess(200, 'this exam is updated succssfuly');
 
         }catch(\Exception $ex){

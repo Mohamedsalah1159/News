@@ -45,6 +45,10 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany('App\Models\ExamUser', 'user_id', 'id');
     }
     //end relations
+
+    public function getStatusAttribute(){
+        return $this->attributes['status'] == 0 ? 'User' : 'Admin';
+    }
     /**
      * The attributes that should be cast.
      *
