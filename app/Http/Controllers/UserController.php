@@ -29,7 +29,7 @@ class UserController extends Controller
         }
 
     }
-    /*public function changeUserStatus($id){
+    public function changeUserStatus($id){
         $user = User::find($id);
         if(! $user){
             return $this->returnError(200, 'sorry this user is not exists');
@@ -48,5 +48,5 @@ class UserController extends Controller
             }
         }
 
-    }*/
+    }
 }

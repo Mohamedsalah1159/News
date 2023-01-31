@@ -24,7 +24,7 @@ Route::group(['namespace'=>'App\Http\Controllers'], function(){
     ##################### end rejester and login and out ##############
         Route::group(['middleware' => ['auth:api','admin']], function(){
         ###################### start User ##############################
-        /*Route::post('changeUserStatus/{id}', 'UserController@changeUserStatus');*/
+        Route::post('changeUserStatus/{id}', 'UserController@changeUserStatus');
         Route::get('getAllAdmins', 'UserController@getAllAdmins');
         ######################## end User ##############################
         ############## start courses ###############

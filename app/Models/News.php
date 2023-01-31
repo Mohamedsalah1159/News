@@ -32,6 +32,22 @@ class News extends Model
     public function getStatus(){
         return $this -> status == 0 ? 'News' : 'Article';
     }
+    public function getGovernmentIdAttribute(){
+        $government = Government::select('name')->where('id', $this->attributes['government_id'])->first();
+        return $this->attributes['government_id'] == '' ? 'non have governmet' : $government->name;
+    }
+    public function getUserIdAttribute(){
+        $user = User::select('name')->where('id', $this->attributes['user_id'])->first();
+        return $this->attributes['user_id'] == '' ? 'non have user' : $user->name;
+    }
+    public function getInitiativeIdAttribute(){
+        $initiative = Initiative::select('name')->where('id', $this->attributes['initiative_id'])->first();
+        return $this->attributes['initiative_id'] == '' ? 'non have initiative' : $initiative->name;
+    }
+    public function getGovernorateIdAttribute(){
+        $governorate = Governorate::select('name')->where('id', $this->attributes['governorate_id'])->first();
+        return $this->attributes['governorate_id'] == '' ? 'non have governorate' : $governorate->name;
+    }
     // relations
     public function governorate(){
         return $this->belongsTo('App\Models\Governorate', 'governorate_id', 'id');

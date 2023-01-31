@@ -228,19 +228,25 @@ class NewsController extends Controller
     }
     public function search(Request $request){
         $search_input = $request->input('search_input');
-        $allNews = News::with(['governorate', 'source', 'idimage', 'words'])->paginate(PAGINATION_COUNT);
+        $allNews = News::with(['governorate', 'source', 'idimage', 'words']);
         if ($search_input == '') {
-            $news = News::with(['governorate', 'source', 'idimage', 'words'])->paginate(PAGINATION_COUNT);
+            $newsName = $allNews->paginate(PAGINATION_COUNT);
         }else{
             if ($search_input){
-                $newsName = News::with(['governorate', 'source', 'idimage', 'words'])->where('name', 'LIKE', '%' . $search_input . '%')->paginate(PAGINATION_COUNT);
+                $newsAll = $allNews->where('name', 'LIKE', '%' . $search_input . '%')->paginate(PAGINATION_COUNT);
             }
-            // if ($search_input){
-            //     $newsWord = News::where('name_ar', 'LIKE', '%' . $search_input . '%')->where('status',1)->get();
-            // }
-            $news = $newsName;//->merge($services_ar);
+            if ($search_input){
+                $newsName = $allNews->whereHas('words', function ($query) use($search_input) {
+                    $query->where('wordname', 'like', '%' . $search_input . '%');
+                })->orWhereHas('governorate', function ( $query ) use($search_input) {
+                    $query->where('name', 'like', '%' . $search_input . '%');
+                })->orWhereHas('user', function ( $query ) use($search_input) {
+                    $query->where('name', 'like', '%' . $search_input . '%');
+                })->paginate(PAGINATION_COUNT);
+            }
+            $newsAll = $newsName;
         }
-        return $this->returnData(200, 'there is all news', $news);
+        return $this->returnData(200, 'there is all news', $newsAll);
 
     }
     public function destroy($id){
